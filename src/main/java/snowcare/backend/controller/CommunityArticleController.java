@@ -10,7 +10,9 @@ import snowcare.backend.dto.request.CommunityArticleSaveRequest;
 import snowcare.backend.dto.response.CommunityArticleResponse;
 import snowcare.backend.service.CommunityArticleService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,16 +41,20 @@ public class CommunityArticleController {
 
     // 커뮤니티 글 작성
     @PostMapping("/new")
-    public ResponseEntity<Long> addCommunityArticle(@RequestBody CommunityArticleSaveRequest request) {
+    public ResponseEntity<Map<String, Long>> addCommunityArticle(@RequestBody CommunityArticleSaveRequest request) {
         Long communityArticleId = communityArticleService.addCommunityArticle(request);
-        return ResponseEntity.ok(communityArticleId);
+        Map<String, Long> response = new HashMap<>();
+        response.put("communityArticleId", communityArticleId);
+        return ResponseEntity.ok(response);
     }
 
     // 커뮤니티 글 수정
     @PatchMapping("/edit/{communityArticleId}")
-    public ResponseEntity<Long> updateCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId, @RequestBody CommunityArticleSaveRequest request) {
+    public ResponseEntity<Map<String, Long>> updateCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId, @RequestBody CommunityArticleSaveRequest request) {
         Long responseCommunityArticleId = communityArticleService.updateCommunityArticle(communityArticleId, request);
-        return ResponseEntity.ok(responseCommunityArticleId);
+        Map<String, Long> response = new HashMap<>();
+        response.put("communityArticleId", responseCommunityArticleId);
+        return ResponseEntity.ok(response);
     }
 
     // 커뮤니티 글 삭제
