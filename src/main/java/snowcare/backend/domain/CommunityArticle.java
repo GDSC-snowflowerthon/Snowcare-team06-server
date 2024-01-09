@@ -30,9 +30,7 @@ public class CommunityArticle extends BaseEntity {
     private String content;
     private String image;
 
-    /*
-    생성 메서드
-     */
+    // 생성 메서드
     public static CommunityArticle createCommunityArticle(CommunityArticleSaveRequest request, User user) {
         CommunityArticle communityArticle = CommunityArticle.builder()
                 .user(user)

@@ -25,7 +25,7 @@ public class User implements UserDetails {
 
     private String kakaoId;
     private String password;
-    private String image;
+    private String profileImage;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<LikeVolunteer> likeVolunteers = new ArrayList<>();
