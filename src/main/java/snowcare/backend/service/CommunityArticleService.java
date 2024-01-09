@@ -7,10 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import snowcare.backend.domain.CommunityArticle;
 import snowcare.backend.domain.User;
 import snowcare.backend.dto.request.CommunityArticleSaveRequest;
+import snowcare.backend.dto.response.CommunityArticleResponse;
 import snowcare.backend.repository.CommunityArticleRepository;
 import snowcare.backend.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +25,11 @@ public class CommunityArticleService {
     /*
     커뮤니티 글 전체 조회
      */
-    public List<CommunityArticle> getAllCommunityArticles() {
-        return communityArticleRepository.findAll();
+    public List<CommunityArticleResponse> getAllCommunityArticles() {
+        List<CommunityArticle> communityArticles = communityArticleRepository.findAll();
+        return communityArticles.stream()
+                .map(CommunityArticleResponse::responseCommunityArticleList)
+                .collect(Collectors.toList());
     }
 
     /*
