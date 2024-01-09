@@ -27,19 +27,10 @@ public class CommunityArticleController {
 
     // 커뮤니티 글 상세 조회
     @GetMapping("/{communityArticleId}")
-    public ResponseEntity<CommunityArticleResponse> getCommunityArticleById(@PathVariable("communityArticleId") Long id) {
-            CommunityArticle communityArticle = communityArticleService.getCommunityArticleById(id);
+    public ResponseEntity<CommunityArticleResponse> getCommunityArticleById(@PathVariable("communityArticleId") Long communityArticleId) {
+            CommunityArticleResponse response = communityArticleService.getCommunityArticleById(communityArticleId);
 
-            if (communityArticle != null) {
-                CommunityArticleResponse response = CommunityArticleResponse.builder()
-                        .userNickname(communityArticle.getUser().getNickname())
-                        .userImage(communityArticle.getUser().getProfileImage())
-                        .communityArticleId(communityArticle.getId())
-                        .createdDate(communityArticle.getCreatedDate())
-                        .title(communityArticle.getTitle())
-                        .content(communityArticle.getContent())
-                        .image(communityArticle.getImage())
-                        .build();
+            if (response != null) {
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -55,14 +46,14 @@ public class CommunityArticleController {
 
     // 커뮤니티 글 수정
     @PatchMapping("/edit/{communityArticleId}")
-    public ResponseEntity<Long> updateCommunityArticle(@PathVariable("communityArticleId") Long id, @RequestBody CommunityArticleSaveRequest request) {
-        Long communityArticleId = communityArticleService.updateCommunityArticle(id, request);
-        return ResponseEntity.ok(communityArticleId);
+    public ResponseEntity<Long> updateCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId, @RequestBody CommunityArticleSaveRequest request) {
+        Long responseCommunityArticleId = communityArticleService.updateCommunityArticle(communityArticleId, request);
+        return ResponseEntity.ok(responseCommunityArticleId);
     }
 
     // 커뮤니티 글 삭제
     @DeleteMapping("/delete/{communityArticleId}")
-    public void deleteCommunityArticle(@PathVariable("communityArticleId") Long id) {
-        communityArticleService.deleteCommunityArticle(id);
+    public void deleteCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId) {
+        communityArticleService.deleteCommunityArticle(communityArticleId);
     }
 }

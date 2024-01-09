@@ -27,7 +27,7 @@ public class CommunityArticleService {
     // 커뮤니티 글 전체 조회
     public List<CommunityArticleResponse> getAllCommunityArticles() {
         List<CommunityArticle> communityArticles = communityArticleRepository.findAll();
-        List<CommunityArticleResponse> communityArticlesList = communityArticles.stream()
+        return communityArticles.stream()
                 .map(m -> CommunityArticleResponse.builder()
                         .userNickname(m.getUser().getNickname())
                         .userImage(m.getUser().getProfileImage())
@@ -38,13 +38,20 @@ public class CommunityArticleService {
                         .image(m.getImage())
                         .build())
                 .collect(Collectors.toList());
-
-        return communityArticlesList;
     }
 
     // 커뮤니티 글 상세 조회
-    public CommunityArticle getCommunityArticleById(Long id) {
-        return communityArticleRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
+    public CommunityArticleResponse getCommunityArticleById(Long id) {
+        CommunityArticle communityArticle = communityArticleRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMUNITYARTICLE));
+        return CommunityArticleResponse.builder()
+                .userNickname(communityArticle.getUser().getNickname())
+                .userImage(communityArticle.getUser().getProfileImage())
+                .communityArticleId(communityArticle.getId())
+                .createdDate(communityArticle.getCreatedDate())
+                .title(communityArticle.getTitle())
+                .content(communityArticle.getContent())
+                .image(communityArticle.getImage())
+                .build();
     }
 
     // 커뮤니티 글 작성
@@ -57,7 +64,7 @@ public class CommunityArticleService {
 
     // 커뮤니티 글 수정
     public Long updateCommunityArticle(Long id, CommunityArticleSaveRequest request) {
-        CommunityArticle communityArticle = communityArticleRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
+        CommunityArticle communityArticle = communityArticleRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMUNITYARTICLE));
         communityArticle.updateCommunityArticle(request);
         return communityArticle.getId();
     }
