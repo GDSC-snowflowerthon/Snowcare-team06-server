@@ -53,6 +53,7 @@ public class LikeService {
 
     // 사용자의 봉사활동글(Volunteer) 좋아요 목록 조회
     public List<VolunteerResponse> getAllUserLikedVolunteers(Long userId) {
+        getUserOrThrow(userId);
         List<Volunteer> volunteers = likeVolunteerRepository.findByUserId(userId).stream()
                 .map(like -> like.getVolunteer())
                 .collect(Collectors.toList());
@@ -98,6 +99,7 @@ public class LikeService {
 
     // 사용자의 커뮤니티글 좋아요 목록 조회
     public List<CommunityArticleResponse> getAllUserLikedCommunityArticles(Long userId) {
+        getUserOrThrow(userId);
         List<CommunityArticle> communityArticles = likeCommunityArticleRepository.findByUserId(userId).stream()
                 .map(like -> like.getCommunityArticle())
                 .collect(Collectors.toList());
