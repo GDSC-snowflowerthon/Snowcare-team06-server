@@ -66,7 +66,7 @@ public class LikeService {
                         .content(v.getContent())
                         .image(v.getImage())
                         .place(v.getPlace())
-                        .createdDate(v.getCreatedDate())
+                        .createdDate(v.getCreatedDate().toLocalDate())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -108,7 +108,7 @@ public class LikeService {
                         .communityArticleId(c.getId())
                         .userNickname(c.getUser().getNickname())
                         .userImage(c.getUser().getProfileImage())
-                        .createdDate(c.getCreatedDate())
+                        .createdDate(c.getCreatedDate().toLocalDate())
                         .title(c.getTitle())
                         .content(c.getContent())
                         .image(c.getImage())

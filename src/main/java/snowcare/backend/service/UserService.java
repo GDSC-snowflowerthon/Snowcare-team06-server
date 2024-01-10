@@ -45,10 +45,9 @@ public class UserService {
     public void changeProfileImage(Long userId, MultipartFile image) throws IOException {
         User findUser = getUserOrThrow(userId);
         String uuid = null;
-        if(image.isEmpty()){
-            throw new CustomException(ErrorCode.SHOULD_EXIST_IMAGE);
+        if(!image.isEmpty()){
+            uuid = imageService.uploadImage(image);
         }
-        uuid = imageService.uploadImage(image);
         findUser.updateProfileImage(uuid);
     }
 

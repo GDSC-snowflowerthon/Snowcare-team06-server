@@ -25,6 +25,7 @@ public class User implements UserDetails {
 
     private String kakaoId;
     private String password;
+    private String profileImage;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<LikeVolunteer> likeVolunteers = new ArrayList<>();
@@ -48,7 +49,6 @@ public class User implements UserDetails {
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
-    private String profileImage;
 
     private String region;
     @Builder.Default
@@ -85,6 +85,7 @@ public class User implements UserDetails {
     }
 
 
+    // UserDetails
     @Override
     public String getPassword() {
         return this.password;

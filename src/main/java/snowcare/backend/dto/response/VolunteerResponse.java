@@ -2,7 +2,7 @@ package snowcare.backend.dto.response;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -14,5 +14,5 @@ public class VolunteerResponse {
     private String content;
     private String image;
     private String place;
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
 }

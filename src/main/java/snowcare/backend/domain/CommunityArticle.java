@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import snowcare.backend.common.entity.BaseEntity;
+import snowcare.backend.dto.request.CommunityArticleSaveRequest;
+import snowcare.backend.repository.UserRepository;
+
 
 @Entity
 @Getter
@@ -26,4 +29,24 @@ public class CommunityArticle extends BaseEntity {
     private String title;
     private String content;
     private String image;
+
+    private int likeCount;
+
+    // 생성 메서드
+    public static CommunityArticle createCommunityArticle(CommunityArticleSaveRequest request, User user, String image) {
+        CommunityArticle communityArticle = CommunityArticle.builder()
+                .user(user)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .image(image)
+                .likeCount(0)
+                .build();
+        return communityArticle;
+    }
+
+    public void updateCommunityArticle(String title, String content, String image) {
+        this.title = title;
+        this.content = content;
+        this.image = image;
+    }
 }
