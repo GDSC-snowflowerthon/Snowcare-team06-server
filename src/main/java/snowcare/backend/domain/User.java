@@ -105,5 +105,10 @@ public class User implements UserDetails {
     public void updateProfileImage(String imageUUID) {
         this.profileImage = imageUUID;
     }
-
+    public void updateNickname(String nickname) {this.nickname = nickname;}
+    public void updateSetting(String region, Boolean newVolunteerAlarm, Boolean weatherAlarm){
+        this.region = region;
+        this.newVolunteerAlarm = newVolunteerAlarm;
+        this.weatherAlarm = weatherAlarm;
+    }
 }
