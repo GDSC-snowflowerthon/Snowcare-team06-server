@@ -24,15 +24,16 @@ public class CommunityArticleController {
 
     // 커뮤니티 글 전체 조회
     @GetMapping()
-    public ResponseEntity<List<CommunityArticleResponse>> getAllCommunityArticles() {
-        List<CommunityArticleResponse> response = communityArticleService.getAllCommunityArticles();
+    public ResponseEntity<List<CommunityArticleResponse>> getAllCommunityArticles(@RequestParam(value="userId") Long userId) {
+        List<CommunityArticleResponse> response = communityArticleService.getAllCommunityArticles(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // 커뮤니티 글 상세 조회
     @GetMapping("/{communityArticleId}")
-    public ResponseEntity<CommunityArticleResponse> getCommunityArticleById(@PathVariable("communityArticleId") Long communityArticleId) {
-        CommunityArticleResponse response = communityArticleService.getCommunityArticleById(communityArticleId);
+    public ResponseEntity<CommunityArticleResponse> getCommunityArticleById(@PathVariable("communityArticleId") Long communityArticleId,
+                                                                            @RequestParam(value="userId") Long userId) {
+        CommunityArticleResponse response = communityArticleService.getCommunityArticleById(communityArticleId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

@@ -25,9 +25,10 @@ public class CommunityArticleService {
     private final CommunityArticleRepository communityArticleRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final LikeService likeService;
 
     // 커뮤니티 글 전체 조회
-    public List<CommunityArticleResponse> getAllCommunityArticles() {
+    public List<CommunityArticleResponse> getAllCommunityArticles(Long userId) {
         List<CommunityArticle> communityArticles = communityArticleRepository.findAll();
         return communityArticles.stream()
                 .map(m -> CommunityArticleResponse.builder()
@@ -39,12 +40,13 @@ public class CommunityArticleService {
                         .content(m.getContent())
                         .image(imageService.processImage(m.getImage()))
                         .likeCount(m.getLikeCount())
+                        .userLiked(likeService.checkIfUserLikedCommunityArticle(userId, m.getId()))
                         .build())
                 .collect(Collectors.toList());
     }
 
     // 커뮤니티 글 상세 조회
-    public CommunityArticleResponse getCommunityArticleById(Long communityArticleId) {
+    public CommunityArticleResponse getCommunityArticleById(Long communityArticleId, Long userId) {
         CommunityArticle communityArticle = getCommunityArticleOrThrow(communityArticleId);
         return CommunityArticleResponse.builder()
                 .userNickname(communityArticle.getUser().getNickname())
@@ -55,6 +57,7 @@ public class CommunityArticleService {
                 .content(communityArticle.getContent())
                 .image(imageService.processImage(communityArticle.getImage()))
                 .likeCount(communityArticle.getLikeCount())
+                .userLiked(likeService.checkIfUserLikedCommunityArticle(userId, communityArticle.getId()))
                 .build();
     }
 

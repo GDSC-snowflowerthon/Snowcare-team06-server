@@ -16,4 +16,5 @@ public class CommunityArticleResponse {
     private String content;
     private String image;
     private int likeCount;
+    private Boolean userLiked;
 }
