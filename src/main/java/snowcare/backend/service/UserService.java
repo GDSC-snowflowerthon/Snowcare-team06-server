@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import snowcare.backend.common.exception.CustomException;
 import snowcare.backend.common.exception.ErrorCode;
 import snowcare.backend.domain.User;
+import snowcare.backend.dto.request.UserSettingChangeRequest;
 import snowcare.backend.dto.response.UserResponse;
 import snowcare.backend.repository.UserRepository;
 
@@ -49,6 +50,27 @@ public class UserService {
             uuid = imageService.uploadImage(image);
         }
         findUser.updateProfileImage(uuid);
+    }
+
+    // 닉네임 중복 조회
+    @Transactional(readOnly = true)
+    public void checkNicknameDuplicate(String nickname) {
+        if (userRepository.existsByNickname(nickname)) {
+            throw new CustomException(ErrorCode.EXIST_USER_NICKNAME);
+        }
+    }
+
+    // 닉네임 변경
+    public void changeUserNickname(Long userId, String nickname) {
+        User findUser = getUserOrThrow(userId);
+        checkNicknameDuplicate(nickname);
+        findUser.updateNickname(nickname);
+    }
+
+    // 설정 변경
+    public void changeUserSetting(UserSettingChangeRequest request) {
+        User findUser = getUserOrThrow(request.getUserId());
+        findUser.updateSetting(request.getRegion(), request.getNewVolunteerAlarm(), request.getWeatherAlarm());
     }
 
     // 예외 처리 - 존재하는 user인지
