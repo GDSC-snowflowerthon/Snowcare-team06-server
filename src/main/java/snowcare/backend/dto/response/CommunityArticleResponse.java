@@ -1,18 +1,18 @@
 package snowcare.backend.dto.response;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class VolunteerResponse {
-    private Long volunteerId;
+public class CommunityArticleResponse {
+    private Long communityArticleId;
     private String userNickname;
     private String userImage;
+    private LocalDateTime createdDate;
     private String title;
     private String content;
     private String image;
-    private String place;
-    private LocalDateTime createdDate;
 }

@@ -48,6 +48,7 @@ public class User implements UserDetails {
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
+    private String profileImage;
 
     private String region;
     @Builder.Default
