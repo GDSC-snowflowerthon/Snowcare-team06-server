@@ -44,9 +44,20 @@ public class CommunityArticle extends BaseEntity {
         return communityArticle;
     }
 
+    // 커뮤니티 글 수정
     public void updateCommunityArticle(String title, String content, String image) {
         this.title = title;
         this.content = content;
         this.image = image;
+    }
+
+    // 좋아요 개수 추가
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    // 좋아요 개수 감소
+    public void deleteLikeCount() {
+        this.likeCount--;
     }
 }

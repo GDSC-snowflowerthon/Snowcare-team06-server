@@ -39,15 +39,18 @@ public class LikeService {
                 .volunteer(volunteer)
                 .build();
         likeVolunteerRepository.save(likeVolunteer);
+        volunteer.addLikeCount();
     }
 
     // 봉사활동글 좋아요 삭제
     public void deleteLikeVolunteer(Long userId, Long volunteerId) {
         LikeVolunteer likeVolunteer = likeVolunteerRepository.findByUserIdAndVolunteerId(userId, volunteerId);
+        Volunteer volunteer = getVolunteerOrThrow(volunteerId);
         if (likeVolunteer == null){
             throw new CustomException(ErrorCode.NOT_FOUND_LIKE_VOLUNTEER);
         }
         likeVolunteerRepository.delete(likeVolunteer);
+        volunteer.deleteLikeCount();
     }
 
 
@@ -84,16 +87,19 @@ public class LikeService {
                 .communityArticle(communityArticle)
                 .build();
         likeCommunityArticleRepository.save(likeCommunityArticle);
+        communityArticle.addLikeCount();
     }
 
 
     // 커뮤니티글 좋아요 삭제
     public void deleteLikeCommunityArticle(Long userId, Long communityArticleId) {
         LikeCommunityArticle likeCommunityArticle = likeCommunityArticleRepository.findByUserIdAndCommunityArticleId(userId, communityArticleId);
+        CommunityArticle communityArticle = getCommunityArticleOrThrow(communityArticleId);
         if (likeCommunityArticle == null){
             throw new CustomException(ErrorCode.NOT_FOUND_LIKE_COMMUNITY_ARTICLE);
         }
         likeCommunityArticleRepository.delete(likeCommunityArticle);
+        communityArticle.deleteLikeCount();
     }
 
 

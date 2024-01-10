@@ -52,6 +52,16 @@ public class Volunteer extends BaseEntity {
         return volunteer;
     }
 
+    // 좋아요 개수 추가
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    // 좋아요 개수 감소
+    public void deleteLikeCount() {
+        this.likeCount--;
+    }
+
     public void addChatMessage(ChatMessage chatMessage){
         chatMessages.add(chatMessage);
         chatMessage.setVolunteer(this);
