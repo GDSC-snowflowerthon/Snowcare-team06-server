@@ -49,7 +49,6 @@ public class User implements UserDetails {
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
-    private String profileImage;
 
     private String region;
     @Builder.Default
@@ -86,6 +85,7 @@ public class User implements UserDetails {
     }
 
 
+    // UserDetails
     @Override
     public String getPassword() {
         return this.password;
@@ -100,5 +100,10 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() { return true; }
     @Override
     public boolean isEnabled() {return true; }
+
+
+    public void updateProfileImage(String imageUUID) {
+        this.profileImage = imageUUID;
+    }
 
 }

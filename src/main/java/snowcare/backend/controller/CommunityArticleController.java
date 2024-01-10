@@ -10,6 +10,7 @@ import snowcare.backend.dto.request.CommunityArticleSaveRequest;
 import snowcare.backend.dto.response.CommunityArticleResponse;
 import snowcare.backend.service.CommunityArticleService;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,25 +24,21 @@ public class CommunityArticleController {
 
     // 커뮤니티 글 전체 조회
     @GetMapping()
-    public List<CommunityArticleResponse> getAllCommunityArticles() {
-        return communityArticleService.getAllCommunityArticles();
+    public ResponseEntity<List<CommunityArticleResponse>> getAllCommunityArticles() {
+        List<CommunityArticleResponse> response = communityArticleService.getAllCommunityArticles();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // 커뮤니티 글 상세 조회
     @GetMapping("/{communityArticleId}")
     public ResponseEntity<CommunityArticleResponse> getCommunityArticleById(@PathVariable("communityArticleId") Long communityArticleId) {
-            CommunityArticleResponse response = communityArticleService.getCommunityArticleById(communityArticleId);
-
-            if (response != null) {
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+        CommunityArticleResponse response = communityArticleService.getCommunityArticleById(communityArticleId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // 커뮤니티 글 작성
     @PostMapping("/new")
-    public ResponseEntity<Map<String, Long>> addCommunityArticle(@RequestBody CommunityArticleSaveRequest request) {
+    public ResponseEntity<Map<String, Long>> addCommunityArticle(CommunityArticleSaveRequest request) throws IOException {
         Long communityArticleId = communityArticleService.addCommunityArticle(request);
         Map<String, Long> response = new HashMap<>();
         response.put("communityArticleId", communityArticleId);
@@ -50,16 +47,16 @@ public class CommunityArticleController {
 
     // 커뮤니티 글 수정
     @PatchMapping("/edit/{communityArticleId}")
-    public ResponseEntity<Map<String, Long>> updateCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId, @RequestBody CommunityArticleSaveRequest request) {
-        Long responseCommunityArticleId = communityArticleService.updateCommunityArticle(communityArticleId, request);
-        Map<String, Long> response = new HashMap<>();
-        response.put("communityArticleId", responseCommunityArticleId);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> updateCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId,
+                                                       CommunityArticleSaveRequest request) throws IOException {
+        communityArticleService.updateCommunityArticle(communityArticleId, request);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     // 커뮤니티 글 삭제
     @DeleteMapping("/delete/{communityArticleId}")
-    public void deleteCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId) {
+    public ResponseEntity<Void> deleteCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId) {
         communityArticleService.deleteCommunityArticle(communityArticleId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
