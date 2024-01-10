@@ -116,6 +116,15 @@ public class LikeService {
                 .collect(Collectors.toList());
     }
 
+    // 유저가 봉사활동글에 좋아요를 눌렀는가
+    public Boolean checkIfUserLikedVolunteer(Long userId, Long volunteerId) {
+        LikeVolunteer liked = likeVolunteerRepository.findByUserIdAndVolunteerId(userId, volunteerId);
+        if (liked == null) {
+            return false;
+        }
+        return true;
+    }
+
     // 유저가 커뮤니티글에 좋아요를 눌렀는가
     public Boolean checkIfUserLikedCommunityArticle(Long userId, Long communityArticleId) {
         LikeCommunityArticle liked = likeCommunityArticleRepository.findByUserIdAndCommunityArticleId(userId, communityArticleId);

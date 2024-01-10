@@ -36,6 +36,8 @@ public class Volunteer extends BaseEntity {
     private String place;
     private String image;
 
+    private int likeCount;
+
     public void addChatMessage(ChatMessage chatMessage){
         chatMessages.add(chatMessage);
         chatMessage.setVolunteer(this);
