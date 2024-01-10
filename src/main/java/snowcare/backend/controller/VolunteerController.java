@@ -37,6 +37,13 @@ public class VolunteerController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    // 봉사활동 구인글 최신 3개 조회
+    @GetMapping("/recent")
+    public ResponseEntity<List<VolunteerResponse>> getThreeVolunteers(@RequestParam(value = "userId") Long userId) {
+        List<VolunteerResponse> responses = volunteerService.getThreeVolunteers(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
     // 봉사활동 구인글 작성
     @PostMapping("/new")
     public ResponseEntity<Map<String, Long>> addVolunteer(VolunteerSaveRequest request) throws IOException {

@@ -14,6 +14,7 @@ import snowcare.backend.repository.UserRepository;
 import snowcare.backend.repository.VolunteerRepository;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,6 +62,28 @@ public class VolunteerService {
                 .likeCount(volunteer.getLikeCount())
                 .userLiked(likeService.checkIfUserLikedVolunteer(userId, volunteer.getId()))
                 .build();
+    }
+
+    // 봉사활동 구인글 최신 3개 조회
+    public List<VolunteerResponse> getThreeVolunteers(Long userId) {
+        List<Volunteer> volunteers = volunteerRepository.findAll();
+        List<VolunteerResponse> latestVolunteers = volunteers.stream()
+                .sorted(Comparator.comparing(Volunteer::getCreatedDate).reversed())
+                .limit(3)
+                .map(m -> VolunteerResponse.builder()
+                        .userNickname(m.getUser().getNickname())
+                        .userImage(m.getUser().getProfileImage())
+                        .volunteerId(m.getId())
+                        .createdDate(m.getCreatedDate().toLocalDate())
+                        .title(m.getTitle())
+                        .content(m.getContent())
+                        .image(imageService.processImage(m.getImage()))
+                        .place(m.getPlace())
+                        .likeCount(m.getLikeCount())
+                        .userLiked(likeService.checkIfUserLikedVolunteer(userId, m.getId()))
+                        .build())
+                .collect(Collectors.toList());
+        return latestVolunteers;
     }
 
     // 봉사활동 구인글 작성
