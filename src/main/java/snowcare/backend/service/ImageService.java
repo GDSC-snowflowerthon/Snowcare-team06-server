@@ -55,7 +55,7 @@ public class ImageService {
         if (StringUtils.isBlank(image)) {
             return null;
         }
-        System.out.println(">>>>>>>>>> >>>>>>>>>>"+ image);
+        System.out.println(">>>>>> S3 Image uuid >>>>>> "+ image);
         return "https://snowcare-bucket.s3.ap-northeast-2.amazonaws.com/" + image;
     }
 }

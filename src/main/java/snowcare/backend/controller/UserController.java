@@ -5,10 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import snowcare.backend.dto.request.ProfileImageChangeRequest;
+import snowcare.backend.dto.response.UserResponse;
 import snowcare.backend.service.UserService;
 
 import java.io.IOException;
@@ -19,6 +18,13 @@ import java.io.IOException;
 @RequestMapping("users")
 public class UserController {
     private final UserService userService;
+
+    // 회원 정보 조회
+    @GetMapping("{userId}")
+    public ResponseEntity<UserResponse> getUser(@PathVariable("userId") Long userId) {
+        UserResponse response = userService.getUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     // 회원 프로필 이미지 수정
     @PatchMapping("profile-image")

@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import snowcare.backend.common.exception.CustomException;
 import snowcare.backend.common.exception.ErrorCode;
 import snowcare.backend.domain.User;
+import snowcare.backend.dto.response.UserResponse;
 import snowcare.backend.repository.UserRepository;
 
 import java.io.IOException;
@@ -21,6 +22,24 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final ImageService imageService;
+
+    // 회원 정보 조회
+    @Transactional(readOnly = true)
+    public UserResponse getUser(Long userId) {
+        User findUser = getUserOrThrow(userId);
+        String imageUrl = imageService.processImage(findUser.getProfileImage());
+
+        UserResponse response = UserResponse.builder()
+                .userId(findUser.getId())
+                .email(findUser.getEmail())
+                .nickname(findUser.getNickname())
+                .profileImage(imageUrl)
+                .region(findUser.getRegion())
+                .weatherAlarm(findUser.getWeatherAlarm())
+                .newVolunteerAlarm(findUser.getNewVolunteerAlarm())
+                .build();
+        return response;
+    }
 
     // 회원 프로필 이미지 변경
     public void changeProfileImage(Long userId, MultipartFile image) throws IOException {
