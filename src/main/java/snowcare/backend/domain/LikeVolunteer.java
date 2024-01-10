@@ -21,7 +21,7 @@ public class LikeVolunteer extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "volunteer_id")
     private Volunteer volunteer;
 

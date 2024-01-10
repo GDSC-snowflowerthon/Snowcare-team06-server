@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import snowcare.backend.common.entity.BaseEntity;
+import snowcare.backend.dto.request.VolunteerSaveRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,19 @@ public class Volunteer extends BaseEntity {
     private String image;
 
     private int likeCount;
+
+    // 생성 메서드
+    public static Volunteer createVolunteer(VolunteerSaveRequest request, User user, String image) {
+        Volunteer volunteer = Volunteer.builder()
+                .user(user)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .place(request.getPlace())
+                .image(image)
+                .likeCount(0)
+                .build();
+        return volunteer;
+    }
 
     public void addChatMessage(ChatMessage chatMessage){
         chatMessages.add(chatMessage);
