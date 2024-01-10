@@ -30,6 +30,8 @@ public class CommunityArticle extends BaseEntity {
     private String content;
     private String image;
 
+    private int likeCount;
+
     // 생성 메서드
     public static CommunityArticle createCommunityArticle(CommunityArticleSaveRequest request, User user) {
         CommunityArticle communityArticle = CommunityArticle.builder()
@@ -37,6 +39,7 @@ public class CommunityArticle extends BaseEntity {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .image(request.getImage())
+                .likeCount(0)
                 .build();
         return communityArticle;
     }

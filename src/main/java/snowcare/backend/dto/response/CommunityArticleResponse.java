@@ -2,6 +2,7 @@ package snowcare.backend.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -14,5 +15,6 @@ public class CommunityArticleResponse {
     private LocalDateTime createdDate;
     private String title;
     private String content;
-    private String image;
+    private MultipartFile image;
+    private int likeCount;
 }

@@ -36,13 +36,14 @@ public class CommunityArticleService {
                         .title(m.getTitle())
                         .content(m.getContent())
                         .image(m.getImage())
+                        .likeCount(m.getLikeCount())
                         .build())
                 .collect(Collectors.toList());
     }
 
     // 커뮤니티 글 상세 조회
-    public CommunityArticleResponse getCommunityArticleById(Long id) {
-        CommunityArticle communityArticle = communityArticleRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMUNITYARTICLE));
+    public CommunityArticleResponse getCommunityArticleById(Long communityArticleId) {
+        CommunityArticle communityArticle = communityArticleRepository.findById(communityArticleId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMUNITYARTICLE));
         return CommunityArticleResponse.builder()
                 .userNickname(communityArticle.getUser().getNickname())
                 .userImage(communityArticle.getUser().getProfileImage())
@@ -51,6 +52,7 @@ public class CommunityArticleService {
                 .title(communityArticle.getTitle())
                 .content(communityArticle.getContent())
                 .image(communityArticle.getImage())
+                .likeCount(communityArticle.getLikeCount())
                 .build();
     }
 
@@ -63,14 +65,14 @@ public class CommunityArticleService {
     }
 
     // 커뮤니티 글 수정
-    public Long updateCommunityArticle(Long id, CommunityArticleSaveRequest request) {
-        CommunityArticle communityArticle = communityArticleRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMUNITYARTICLE));
+    public Long updateCommunityArticle(Long communityArticleId, CommunityArticleSaveRequest request) {
+        CommunityArticle communityArticle = communityArticleRepository.findById(communityArticleId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMUNITYARTICLE));
         communityArticle.updateCommunityArticle(request);
         return communityArticle.getId();
     }
 
     // 커뮤니티 글 삭제
-    public void deleteCommunityArticle(Long id) {
-        communityArticleRepository.deleteById(id);
+    public void deleteCommunityArticle(Long communityArticleId) {
+        communityArticleRepository.deleteById(communityArticleId);
     }
 }
