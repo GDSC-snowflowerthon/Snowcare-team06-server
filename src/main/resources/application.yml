@@ -33,3 +33,7 @@ spring:
         auto : false
       stack:
         auto : false
+
+  servlet:
+    multipart:
+      max-file-size: 2MB
