@@ -116,6 +116,14 @@ public class LikeService {
                 .collect(Collectors.toList());
     }
 
+    // 유저가 커뮤니티글에 좋아요를 눌렀는가
+    public Boolean checkIfUserLikedCommunityArticle(Long userId, Long communityArticleId) {
+        LikeCommunityArticle liked = likeCommunityArticleRepository.findByUserIdAndCommunityArticleId(userId, communityArticleId);
+        if (liked == null){
+            return false;
+        }
+        return true;
+    }
 
     // 예외 처리 - 존재하는 User 인가
     private User getUserOrThrow(Long userId) {
