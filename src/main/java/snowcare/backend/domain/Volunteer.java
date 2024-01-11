@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import snowcare.backend.common.entity.BaseEntity;
+import snowcare.backend.dto.request.VolunteerSaveRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,31 @@ public class Volunteer extends BaseEntity {
     @Column(nullable = false)
     private String place;
     private String image;
+
+    private int likeCount;
+
+    // 생성 메서드
+    public static Volunteer createVolunteer(VolunteerSaveRequest request, User user, String image) {
+        Volunteer volunteer = Volunteer.builder()
+                .user(user)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .place(request.getPlace())
+                .image(image)
+                .likeCount(0)
+                .build();
+        return volunteer;
+    }
+
+    // 좋아요 개수 추가
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    // 좋아요 개수 감소
+    public void subLikeCount() {
+        this.likeCount--;
+    }
 
     public void addChatMessage(ChatMessage chatMessage){
         chatMessages.add(chatMessage);

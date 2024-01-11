@@ -1,5 +1,6 @@
 package snowcare.backend.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class CommunityArticleController {
 
     // 커뮤니티 글 작성
     @PostMapping("/new")
-    public ResponseEntity<Map<String, Long>> addCommunityArticle(CommunityArticleSaveRequest request) throws IOException {
+    public ResponseEntity<Map<String, Long>> addCommunityArticle(@Valid CommunityArticleSaveRequest request) throws IOException {
         Long communityArticleId = communityArticleService.addCommunityArticle(request);
         Map<String, Long> response = new HashMap<>();
         response.put("communityArticleId", communityArticleId);
@@ -50,7 +51,7 @@ public class CommunityArticleController {
     // 커뮤니티 글 수정
     @PatchMapping("/edit/{communityArticleId}")
     public ResponseEntity<Void> updateCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId,
-                                                       CommunityArticleSaveRequest request) throws IOException {
+                                                       @Valid CommunityArticleSaveRequest request) throws IOException {
         communityArticleService.updateCommunityArticle(communityArticleId, request);
         return new ResponseEntity(HttpStatus.OK);
     }

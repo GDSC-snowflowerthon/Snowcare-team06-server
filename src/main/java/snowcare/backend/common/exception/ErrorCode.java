@@ -23,6 +23,9 @@ public enum ErrorCode {
     // CommunityArticle 예외
     NOT_FOUND_COMMUNITY_ARTICLE(HttpStatus.NOT_FOUND, "해당 커뮤니티 글을 찾을 수 없습니다."),
 
+    // UserVolunteerPost 예외
+    NOT_FOUND_USER_VOLUNTEER_POST(HttpStatus.NOT_FOUND, "해당 나의 봉사활동 기록글을 찾을 수 없습니다"),
+
     // like 예외
     NOT_FOUND_LIKE_VOLUNTEER(HttpStatus.NOT_FOUND, "해당 봉사활동글에 좋아요를 하지 않았습니다."),
     NOT_FOUND_LIKE_COMMUNITY_ARTICLE(HttpStatus.NOT_FOUND, "해당 커뮤니티글에 좋아요를 하지 않았습니다."),

@@ -15,5 +15,6 @@ public class VolunteerResponse {
     private String image;
     private String place;
     private LocalDate createdDate;
+    private int likeCount;
     private Boolean userLiked;
 }
