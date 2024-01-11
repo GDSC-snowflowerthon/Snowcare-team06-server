@@ -50,7 +50,7 @@ public class LikeService {
             throw new CustomException(ErrorCode.NOT_FOUND_LIKE_VOLUNTEER);
         }
         likeVolunteerRepository.delete(likeVolunteer);
-        volunteer.deleteLikeCount();
+        volunteer.subLikeCount();
     }
 
 
@@ -99,7 +99,7 @@ public class LikeService {
             throw new CustomException(ErrorCode.NOT_FOUND_LIKE_COMMUNITY_ARTICLE);
         }
         likeCommunityArticleRepository.delete(likeCommunityArticle);
-        communityArticle.deleteLikeCount();
+        communityArticle.subLikeCount();
     }
 
 

@@ -58,7 +58,7 @@ public class Volunteer extends BaseEntity {
     }
 
     // 좋아요 개수 감소
-    public void deleteLikeCount() {
+    public void subLikeCount() {
         this.likeCount--;
     }
 
