@@ -66,10 +66,8 @@ public class VolunteerService {
 
     // 봉사활동 구인글 최신 3개 조회
     public List<VolunteerResponse> getThreeVolunteers(Long userId) {
-        List<Volunteer> volunteers = volunteerRepository.findAll();
+        List<Volunteer> volunteers = volunteerRepository.findTop3ByIdDesc();
         List<VolunteerResponse> latestVolunteers = volunteers.stream()
-                .sorted(Comparator.comparing(Volunteer::getCreatedDate).reversed())
-                .limit(3)
                 .map(m -> VolunteerResponse.builder()
                         .userNickname(m.getUser().getNickname())
                         .userImage(m.getUser().getProfileImage())
