@@ -39,15 +39,18 @@ public class LikeService {
                 .volunteer(volunteer)
                 .build();
         likeVolunteerRepository.save(likeVolunteer);
+        volunteer.addLikeCount();
     }
 
     // 봉사활동글 좋아요 삭제
     public void deleteLikeVolunteer(Long userId, Long volunteerId) {
         LikeVolunteer likeVolunteer = likeVolunteerRepository.findByUserIdAndVolunteerId(userId, volunteerId);
+        Volunteer volunteer = getVolunteerOrThrow(volunteerId);
         if (likeVolunteer == null){
             throw new CustomException(ErrorCode.NOT_FOUND_LIKE_VOLUNTEER);
         }
         likeVolunteerRepository.delete(likeVolunteer);
+        volunteer.subLikeCount();
     }
 
 
@@ -84,16 +87,19 @@ public class LikeService {
                 .communityArticle(communityArticle)
                 .build();
         likeCommunityArticleRepository.save(likeCommunityArticle);
+        communityArticle.addLikeCount();
     }
 
 
     // 커뮤니티글 좋아요 삭제
     public void deleteLikeCommunityArticle(Long userId, Long communityArticleId) {
         LikeCommunityArticle likeCommunityArticle = likeCommunityArticleRepository.findByUserIdAndCommunityArticleId(userId, communityArticleId);
+        CommunityArticle communityArticle = getCommunityArticleOrThrow(communityArticleId);
         if (likeCommunityArticle == null){
             throw new CustomException(ErrorCode.NOT_FOUND_LIKE_COMMUNITY_ARTICLE);
         }
         likeCommunityArticleRepository.delete(likeCommunityArticle);
+        communityArticle.subLikeCount();
     }
 
 
@@ -114,6 +120,15 @@ public class LikeService {
                         .image(c.getImage())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    // 유저가 봉사활동글에 좋아요를 눌렀는가
+    public Boolean checkIfUserLikedVolunteer(Long userId, Long volunteerId) {
+        LikeVolunteer liked = likeVolunteerRepository.findByUserIdAndVolunteerId(userId, volunteerId);
+        if (liked == null) {
+            return false;
+        }
+        return true;
     }
 
     // 유저가 커뮤니티글에 좋아요를 눌렀는가
