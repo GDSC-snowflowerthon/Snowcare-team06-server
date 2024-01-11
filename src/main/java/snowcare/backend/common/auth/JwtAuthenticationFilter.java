@@ -45,7 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         if (request.getServletPath().contains("/auth") || request.getServletPath().contains("/swagger-ui")
-            || request.getServletPath().contains("/swagger-resources") || request.getServletPath().contains("v3/api-docs")) {
+            || request.getServletPath().contains("/swagger-resources") || request.getServletPath().contains("v3/api-docs")
+            || request.getServletPath().contains("/users/nickname")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -60,6 +61,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else{
+            filterChain.doFilter(request, response);
+            return;
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null || authentication.getName() == null){

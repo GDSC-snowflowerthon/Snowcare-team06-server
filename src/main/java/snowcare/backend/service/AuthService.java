@@ -35,7 +35,7 @@ public class AuthService {
     private Long newUser(OAuthInfoResponse oAuthInfoResponse, OAuthLoginParams extraParams) {
         User user = User.builder()
                 .email(oAuthInfoResponse.getEmail())
-                .nickname(oAuthInfoResponse.getNickname())
+                .nickname(extraParams.getNickname())
                 .region(extraParams.getRegion())
                 .weatherAlarm(extraParams.getWeatherAlarm())
                 .newVolunteerAlarm(extraParams.getNewVolunteerAlarm())
