@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static snowcare.backend.domain.Authority.ROLE_USER;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -46,6 +48,10 @@ public class User implements UserDetails {
     private String nickname;
     @Builder.Default
     private String role="ROLE_USER";
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private Authority authority=ROLE_USER;
+
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;

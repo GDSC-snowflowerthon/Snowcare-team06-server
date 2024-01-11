@@ -23,7 +23,7 @@ public class AuthService {
     public AuthTokens login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         Long userId = findOrCreateUser(oAuthInfoResponse, params);
-        return authTokensGenerator.generate(userId);
+        return authTokensGenerator.generate(userId, oAuthInfoResponse.getEmail());
     }
 
     private Long findOrCreateUser(OAuthInfoResponse oAuthInfoResponse, OAuthLoginParams extraParams) {

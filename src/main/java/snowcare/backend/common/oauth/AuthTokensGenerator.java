@@ -9,6 +9,8 @@ import snowcare.backend.common.exception.ErrorCode;
 import snowcare.backend.common.jwt.JwtTokenProvider;
 import snowcare.backend.common.oauth.dto.AccessTokenResponse;
 import snowcare.backend.common.oauth.dto.AuthTokens;
+import snowcare.backend.domain.User;
+import snowcare.backend.repository.UserRepository;
 
 import java.util.Date;
 
@@ -21,15 +23,18 @@ public class AuthTokensGenerator { // AuthTokens 을 발급해주는 클래스
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisUtil redisUtil;
+    private final UserRepository userRepository;
 
-    public AuthTokens generate(Long userId) { // userId (사용자 식별값) 을 받아 Access Token 을 생성
+    public AuthTokens generate(Long userId, String email) { // userId (사용자 식별값) 을 받아 Access Token 을 생성
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
 
         String subject = userId.toString();
-        String accessToken = jwtTokenProvider.generate(subject, accessTokenExpiredAt);
-        String refreshToken = jwtTokenProvider.generate(subject, refreshTokenExpiredAt);
+        User user = userRepository.findById(Long.valueOf(userId))
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        String accessToken = jwtTokenProvider.generate(subject, accessTokenExpiredAt, email, user.getAuthority());
+        String refreshToken = jwtTokenProvider.generate(subject, refreshTokenExpiredAt, email, user.getAuthority());
 
         redisUtil.setDataExpire(String.valueOf(userId), refreshToken, refreshTokenExpiredAt.getTime()); // 시간은 long 타입으로
 
@@ -44,12 +49,13 @@ public class AuthTokensGenerator { // AuthTokens 을 발급해주는 클래스
         String userId = extractUserId(refreshToken).toString();
         String data = redisUtil.getData(userId);
         if (!data.equals(refreshToken)) {
-            //log.info("Exception!!");
             throw new CustomException(ErrorCode.UNAUTHORIZED_REFRESH_TOKEN);
         }
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String newAccessToken = jwtTokenProvider.generate(userId, accessTokenExpiredAt);
+        User user = userRepository.findById(Long.valueOf(userId))
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        String newAccessToken = jwtTokenProvider.generate(userId, accessTokenExpiredAt, user.getEmail(), user.getAuthority());
         return AccessTokenResponse.of(newAccessToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
 
