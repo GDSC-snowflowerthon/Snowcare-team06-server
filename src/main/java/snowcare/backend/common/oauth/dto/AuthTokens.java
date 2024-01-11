@@ -1,4 +1,4 @@
-package snowcare.backend.common.oauth;
+package snowcare.backend.common.oauth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

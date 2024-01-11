@@ -38,6 +38,11 @@ spring:
     multipart:
       max-file-size: 2MB
 
+  data:
+    redis:
+      port: ${spring.data.redis.port}
+      host: ${spring.data.redis.host}
+
 jwt:
   secret: ${application.jwt.secret}
   secret_refresh: ${application.jwt.secret_refresh}

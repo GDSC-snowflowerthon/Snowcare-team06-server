@@ -2,9 +2,12 @@ package snowcare.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import snowcare.backend.common.oauth.*;
+import snowcare.backend.common.oauth.dto.AccessTokenResponse;
+import snowcare.backend.common.oauth.dto.AuthTokens;
 import snowcare.backend.domain.User;
 import snowcare.backend.repository.UserRepository;
 
@@ -40,5 +43,13 @@ public class AuthService {
                 .build();
 
         return userRepository.save(user).getId();
+    }
+
+    public void logout(String accessToken){
+        authTokensGenerator.deleteRefreshToken(accessToken);
+    }
+
+    public AccessTokenResponse refreshToken(String refreshToken) {
+        return authTokensGenerator.accessTokenByRefreshToken(refreshToken);
     }
 }
