@@ -37,3 +37,14 @@ spring:
   servlet:
     multipart:
       max-file-size: 2MB
+
+jwt:
+  secret: ${application.jwt.secret}
+  secret_refresh: ${application.jwt.secret_refresh}
+
+oauth:
+  kakao:
+    client-id: ${oauth.kakao.client-id}
+    url:
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
