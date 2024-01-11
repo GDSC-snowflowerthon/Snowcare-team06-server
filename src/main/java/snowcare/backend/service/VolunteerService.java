@@ -66,7 +66,7 @@ public class VolunteerService {
 
     // 봉사활동 구인글 최신 3개 조회
     public List<VolunteerResponse> getThreeVolunteers(Long userId) {
-        List<Volunteer> volunteers = volunteerRepository.findTop3ByIdDesc();
+        List<Volunteer> volunteers = volunteerRepository.findFirst3ByOrderByIdDesc();
         List<VolunteerResponse> latestVolunteers = volunteers.stream()
                 .map(m -> VolunteerResponse.builder()
                         .userNickname(m.getUser().getNickname())

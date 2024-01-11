@@ -7,6 +7,5 @@ import snowcare.backend.domain.Volunteer;
 import java.util.List;
 
 public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
-    @Query(value = "SELECT * FROM volunteer ORDER BY volunteer_id DESC LIMIT 3", nativeQuery = true)
-    List<Volunteer> findTop3ByIdDesc();
+    List<Volunteer> findFirst3ByOrderByIdDesc();
 }
