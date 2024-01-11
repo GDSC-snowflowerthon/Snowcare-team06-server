@@ -43,7 +43,7 @@ public class KakaoApiClient implements OAuthApiClient { // 카카오 로그인 �
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> body = params.makeBody();
+        MultiValueMap<String, Object> body = params.makeBody();
         body.add("grant_type", GRANT_TYPE);
         body.add("client_id", clientId);
 

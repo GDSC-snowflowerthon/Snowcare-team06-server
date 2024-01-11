@@ -50,6 +50,12 @@ public class User implements UserDetails {
     @CreatedDate
     private LocalDateTime createdDate;
 
+    @PrePersist
+    public void prePersist(){
+        LocalDateTime now = LocalDateTime.now();
+        createdDate = now;
+    }
+
     private String region;
     @Builder.Default
     private Boolean weatherAlarm=false;

@@ -19,20 +19,23 @@ public class AuthService {
 
     public AuthTokens login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
-        Long memberId = findOrCreateMember(oAuthInfoResponse);
-        return authTokensGenerator.generate(memberId);
+        Long userId = findOrCreateUser(oAuthInfoResponse, params);
+        return authTokensGenerator.generate(userId);
     }
 
-    private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
+    private Long findOrCreateUser(OAuthInfoResponse oAuthInfoResponse, OAuthLoginParams extraParams) {
         return userRepository.findByEmail(oAuthInfoResponse.getEmail())
                 .map(User::getId)
-                .orElseGet(() -> newMember(oAuthInfoResponse));
+                .orElseGet(() -> newUser(oAuthInfoResponse, extraParams));
     }
 
-    private Long newMember(OAuthInfoResponse oAuthInfoResponse) {
+    private Long newUser(OAuthInfoResponse oAuthInfoResponse, OAuthLoginParams extraParams) {
         User user = User.builder()
                 .email(oAuthInfoResponse.getEmail())
                 .nickname(oAuthInfoResponse.getNickname())
+                .region(extraParams.getRegion())
+                .weatherAlarm(extraParams.getWeatherAlarm())
+                .newVolunteerAlarm(extraParams.getNewVolunteerAlarm())
                 //.oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .build();
 

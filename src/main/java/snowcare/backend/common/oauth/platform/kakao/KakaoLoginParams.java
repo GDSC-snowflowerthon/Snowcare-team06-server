@@ -11,6 +11,10 @@ import snowcare.backend.common.oauth.OAuthProvider;
 @NoArgsConstructor
 public class KakaoLoginParams implements OAuthLoginParams {
     private String authorizationCode;
+    // 추가 정보
+    private String region;
+    private Boolean weatherAlarm;
+    private Boolean newVolunteerAlarm;
 
     @Override
     public OAuthProvider oAuthProvider() {
@@ -18,9 +22,12 @@ public class KakaoLoginParams implements OAuthLoginParams {
     }
 
     @Override
-    public MultiValueMap<String, String> makeBody() {
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+    public MultiValueMap<String, Object> makeBody() {
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("code", authorizationCode);
+        body.add("region", region);
+        body.add("weatherAlarm", weatherAlarm);
+        body.add("newVolunteerAlarm", newVolunteerAlarm);
         return body;
     }
 }

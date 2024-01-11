@@ -4,5 +4,8 @@ import org.springframework.util.MultiValueMap;
 
 public interface OAuthLoginParams {
     OAuthProvider oAuthProvider();
-    MultiValueMap<String, String> makeBody();
+    MultiValueMap<String, Object> makeBody();
+    String getRegion();
+    Boolean getWeatherAlarm();
+    Boolean getNewVolunteerAlarm();
 }
