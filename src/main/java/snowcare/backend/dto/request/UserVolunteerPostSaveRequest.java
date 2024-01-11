@@ -3,6 +3,8 @@ package snowcare.backend.dto.request;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,5 +15,5 @@ public class UserVolunteerPostSaveRequest {
     private String title;
     private String content;
     private MultipartFile image;
-    private String userVolunteerDate;
+    private LocalDate userVolunteerDate;
 }

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import snowcare.backend.common.entity.BaseEntity;
 import snowcare.backend.dto.request.UserVolunteerPostSaveRequest;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -27,7 +29,7 @@ public class UserVolunteerPost extends BaseEntity {
     private String title;
     private String content;
     private String image;
-    private String userVolunteerDate;
+    private LocalDate userVolunteerDate;
 
     // 생성 메서드
     public static UserVolunteerPost createUserVolunteerPost(UserVolunteerPostSaveRequest request, User user, String image) {
