@@ -13,6 +13,7 @@ public class KakaoLoginParams implements OAuthLoginParams {
     private String authorizationCode;
     // 추가 정보
     private String region;
+    private String nickname;
     private Boolean weatherAlarm;
     private Boolean newVolunteerAlarm;
 
@@ -26,6 +27,7 @@ public class KakaoLoginParams implements OAuthLoginParams {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("code", authorizationCode);
         body.add("region", region);
+        body.add("nickname", nickname);
         body.add("weatherAlarm", weatherAlarm);
         body.add("newVolunteerAlarm", newVolunteerAlarm);
         return body;

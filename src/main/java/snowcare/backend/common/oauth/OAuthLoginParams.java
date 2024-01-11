@@ -6,6 +6,7 @@ public interface OAuthLoginParams {
     OAuthProvider oAuthProvider();
     MultiValueMap<String, Object> makeBody();
     String getRegion();
+    String getNickname();
     Boolean getWeatherAlarm();
     Boolean getNewVolunteerAlarm();
 }
