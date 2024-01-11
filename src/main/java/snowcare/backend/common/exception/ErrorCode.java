@@ -12,6 +12,11 @@ public enum ErrorCode {
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     EXIST_USER_NICKNAME(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
 
+    // Auth 예외
+    UNAUTHORIZED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "Refresh Token이 유효하지 않습니다."),
+    NOT_FOUND_REFRESH_TOKEN(HttpStatus.NOT_FOUND, "Refresh Token을 찾을 수 없는 사용자입니다. 다시 로그인하세요."),
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
+
     // Volunteer 예외
     NOT_FOUND_VOLUNTEER(HttpStatus.NOT_FOUND, "해당 봉사활동 글을 찾을 수 없습니다."),
 
