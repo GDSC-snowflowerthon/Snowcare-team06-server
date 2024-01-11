@@ -26,4 +26,5 @@ public class UserVolunteerPost extends BaseEntity {
     private String title;
     private String content;
     private String image;
+    private String userVolunteerDate;
 }
