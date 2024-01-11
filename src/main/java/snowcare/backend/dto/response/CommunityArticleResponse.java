@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Builder
@@ -17,4 +18,5 @@ public class CommunityArticleResponse {
     private String image;
     private int likeCount;
     private Boolean userLiked;
+    private List<CommentResponse> comments;
 }

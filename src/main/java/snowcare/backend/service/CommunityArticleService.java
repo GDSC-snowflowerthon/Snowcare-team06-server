@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import snowcare.backend.common.exception.CustomException;
 import snowcare.backend.common.exception.ErrorCode;
+import snowcare.backend.domain.CommentCommunityArticle;
 import snowcare.backend.domain.CommunityArticle;
 import snowcare.backend.domain.User;
 import snowcare.backend.dto.request.CommunityArticleSaveRequest;
+import snowcare.backend.dto.response.CommentResponse;
 import snowcare.backend.dto.response.CommunityArticleResponse;
+import snowcare.backend.repository.CommentCommunityArticleRepository;
 import snowcare.backend.repository.CommunityArticleRepository;
 import snowcare.backend.repository.UserRepository;
 
@@ -26,6 +29,7 @@ public class CommunityArticleService {
     private final UserRepository userRepository;
     private final ImageService imageService;
     private final LikeService likeService;
+    private final CommentCommunityArticleRepository commentCommunityArticleRepository;
 
     // 커뮤니티 글 전체 조회
     public List<CommunityArticleResponse> getAllCommunityArticles(Long userId) {
@@ -48,6 +52,14 @@ public class CommunityArticleService {
     // 커뮤니티 글 상세 조회
     public CommunityArticleResponse getCommunityArticleById(Long communityArticleId, Long userId) {
         CommunityArticle communityArticle = getCommunityArticleOrThrow(communityArticleId);
+        List<CommentCommunityArticle> commentCommunityArticles = commentCommunityArticleRepository.findByUserIdAndCommunityArticleId(userId, communityArticleId);
+        List<CommentResponse> commentResponses = commentCommunityArticles.stream()
+                .map(m -> CommentResponse.builder()
+                        .userNickname(m.getUser().getNickname())
+                        .content(m.getContent())
+                        .createdDate(m.getCreatedDate().toLocalDate())
+                        .build())
+                .collect(Collectors.toList());
         return CommunityArticleResponse.builder()
                 .userNickname(communityArticle.getUser().getNickname())
                 .userImage(communityArticle.getUser().getProfileImage())
@@ -58,12 +70,13 @@ public class CommunityArticleService {
                 .image(imageService.processImage(communityArticle.getImage()))
                 .likeCount(communityArticle.getLikeCount())
                 .userLiked(likeService.checkIfUserLikedCommunityArticle(userId, communityArticle.getId()))
+                .comments(commentResponses)
                 .build();
     }
 
     // 커뮤니티 글 작성
     public Long addCommunityArticle(CommunityArticleSaveRequest request) throws IOException {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        User user = getUserOrThrow(request.getUserId());
         String imageUUID = null;
         if(!request.getImage().isEmpty()){
             imageUUID = imageService.uploadImage(request.getImage());
@@ -89,15 +102,15 @@ public class CommunityArticleService {
         communityArticleRepository.deleteById(communityArticleId);
     }
 
-    // 예외 처리 - 존재하는 커뮤니티글인가
-    private CommunityArticle getCommunityArticleOrThrow(Long id) {
-        return communityArticleRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMUNITY_ARTICLE));
-    }
-
     // 예외 처리 - 존재하는 User 인가
     private User getUserOrThrow(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+    }
+
+    // 예외 처리 - 존재하는 커뮤니티글인가
+    private CommunityArticle getCommunityArticleOrThrow(Long id) {
+        return communityArticleRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMUNITY_ARTICLE));
     }
 }
