@@ -71,6 +71,7 @@ public class LikeService {
                         .image(imageService.processImage(v.getImage()))
                         .place(v.getPlace())
                         .createdDate(v.getCreatedDate().toLocalDate())
+                        .likeCount(v.getLikeCount())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -119,6 +120,7 @@ public class LikeService {
                         .title(c.getTitle())
                         .content(c.getContent())
                         .image(imageService.processImage(c.getImage()))
+                        .likeCount(c.getLikeCount())
                         .build())
                 .collect(Collectors.toList());
     }
