@@ -19,11 +19,9 @@ public class CommentController {
     private final CommentService commentService;
 
     // 봉사활동글 댓글 추가
-    @PostMapping("/volunteer/{volunteerId}")
-    public ResponseEntity<Void> addCommentVolunteer(@PathVariable("volunteerId") Long volunteerId,
-                                                    @RequestParam(value = "userId") Long userId,
-                                                    @RequestParam(value = "content") String content) throws IOException {
-        commentService.addCommentVolunteer(userId, volunteerId, content);
+    @PostMapping("/volunteer")
+    public ResponseEntity<Void> addCommentVolunteer(CommentSaveRequest request) throws IOException {
+        commentService.addCommentVolunteer(request);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -35,11 +33,9 @@ public class CommentController {
     }
 
     // 커뮤니티글 댓글 추가
-    @PostMapping("/community/{communityArticleId}")
-    public ResponseEntity<Void> addCommentCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId,
-                                                           @RequestParam(value = "userId") Long userId,
-                                                           @RequestParam(value = "content") String content) throws IOException {
-        commentService.addCommentCommunityArticle(userId, communityArticleId, content);
+    @PostMapping("/community")
+    public ResponseEntity<Void> addCommentCommunityArticle(CommentSaveRequest request) throws IOException {
+        commentService.addCommentCommunityArticle(request);
         return new ResponseEntity(HttpStatus.OK);
     }
 

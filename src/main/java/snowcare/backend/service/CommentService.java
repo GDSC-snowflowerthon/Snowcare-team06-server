@@ -24,10 +24,10 @@ public class CommentService {
     private final CommunityArticleRepository communityArticleRepository;
 
     // 봉사활동글 댓글 추가
-    public void addCommentVolunteer(Long userId, Long volunteerId, String content) throws IOException {
-        User user =  getUserOrThrow(userId);
-        Volunteer volunteer = getVolunteerOrThrow(volunteerId);
-        CommentVolunteer commentVolunteer = CommentVolunteer.createCommentVolunteer(user, volunteer, content);
+    public void addCommentVolunteer(CommentSaveRequest request) throws IOException {
+        User user =  getUserOrThrow(request.getUserId());
+        Volunteer volunteer = getVolunteerOrThrow(request.getPostId());
+        CommentVolunteer commentVolunteer = CommentVolunteer.createCommentVolunteer(user, volunteer, request.getContent());
         commentVolunteerRepository.save(commentVolunteer);
     }
 
@@ -38,10 +38,10 @@ public class CommentService {
     }
 
     // 커뮤니티글 댓글 추가
-    public void addCommentCommunityArticle(Long userId, Long communtiyArticleId, String content) throws IOException {
-        User user =  getUserOrThrow(userId);
-        CommunityArticle communityArticle = getCommunityArticleOrThrow(communtiyArticleId);
-        CommentCommunityArticle commentCommunityArticle = CommentCommunityArticle.createCommentCommunityArticle(user, communityArticle, content);
+    public void addCommentCommunityArticle(CommentSaveRequest request) throws IOException {
+        User user =  getUserOrThrow(request.getUserId());
+        CommunityArticle communityArticle = getCommunityArticleOrThrow(request.getPostId());
+        CommentCommunityArticle commentCommunityArticle = CommentCommunityArticle.createCommentCommunityArticle(user, communityArticle, request.getContent());
         commentCommunityArticleRepository.save(commentCommunityArticle);
     }
 
