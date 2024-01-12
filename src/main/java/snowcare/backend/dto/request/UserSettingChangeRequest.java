@@ -12,6 +12,8 @@ public class UserSettingChangeRequest {
     @NotNull
     private Long userId;
     private String region;
+    private Double latitude;
+    private Double longitude;
     @NotNull
     private Boolean newVolunteerAlarm;
     @NotNull
