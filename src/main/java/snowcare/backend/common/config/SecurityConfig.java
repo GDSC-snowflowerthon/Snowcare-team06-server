@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import snowcare.backend.common.auth.JwtAuthenticationFilter;
-import snowcare.backend.common.auth.JwtExceptionFilter;
+//import snowcare.backend.common.auth.JwtAuthenticationFilter;
+//import snowcare.backend.common.auth.JwtExceptionFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -28,28 +28,29 @@ public class SecurityConfig {
             "/users/nickname/**",
             "/volunteers/recent/**",
             "/volunteers",
-            "/community"
+            "/community",
+            "/error"
     };
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
-    private final JwtExceptionFilter jwtExceptionFilter;
+//    private final JwtAuthenticationFilter jwtAuthFilter;
+//    private final AuthenticationProvider authenticationProvider;
+//    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .csrf(c -> c.disable())
                 .httpBasic(h -> h.disable())
                 .formLogin(f -> f.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers(WHITE_LIST_URL)
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
-                )
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
-        return http.build();
+//                .authorizeHttpRequests(req ->
+//                        req.requestMatchers(WHITE_LIST_URL)
+//                                .permitAll()
+//                                .anyRequest()
+//                                .authenticated()
+//                )
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
+                .build();
     }
 }
