@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static snowcare.backend.domain.Authority.ROLE_USER;
 
 @Entity
 @Getter
@@ -48,9 +47,6 @@ public class User implements UserDetails {
     private String nickname;
     @Builder.Default
     private String role="ROLE_USER";
-    @Builder.Default
-    @Enumerated(EnumType.STRING)
-    private Authority authority=ROLE_USER;
 
     @Column(updatable = false)
     @CreatedDate
@@ -73,6 +69,7 @@ public class User implements UserDetails {
     // UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority(this.role));
         return authorities;

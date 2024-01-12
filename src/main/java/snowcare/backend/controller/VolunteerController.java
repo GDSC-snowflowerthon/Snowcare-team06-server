@@ -25,7 +25,7 @@ public class VolunteerController {
 
     // 봉사활동 구인글 전체 조회
     @GetMapping()
-    public ResponseEntity<List<VolunteerResponse>> getAllVolunteers(@RequestParam(value = "userId") Long userId) {
+    public ResponseEntity<List<VolunteerResponse>> getAllVolunteers(@RequestParam(value = "userId", required = false, defaultValue = "0") Long userId) {
         List<VolunteerResponse> responses = volunteerService.getAllVolunteers(userId);
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
@@ -33,14 +33,14 @@ public class VolunteerController {
     // 봉사활동 구인글 상세 조회
     @GetMapping("/{volunteerId}")
     public ResponseEntity<VolunteerResponse> getVolunteerById(@PathVariable("volunteerId") Long volunteerId,
-                                                              @RequestParam(value = "userId") Long userId) {
+                                                              @RequestParam(value = "userId", required = false, defaultValue = "0") Long userId) {
         VolunteerResponse response = volunteerService.getVolunteerById(volunteerId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // 봉사활동 구인글 최신 3개 조회
     @GetMapping("/recent")
-    public ResponseEntity<List<VolunteerResponse>> getThreeVolunteers(@RequestParam(value = "userId") Long userId) {
+    public ResponseEntity<List<VolunteerResponse>> getThreeVolunteers(@RequestParam(value = "userId", required = false, defaultValue = "0") Long userId) {
         List<VolunteerResponse> responses = volunteerService.getThreeVolunteers(userId);
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
