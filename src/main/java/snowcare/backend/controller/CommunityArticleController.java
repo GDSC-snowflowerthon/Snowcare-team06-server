@@ -1,11 +1,12 @@
 package snowcare.backend.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import snowcare.backend.domain.CommunityArticle;
+import snowcare.backend.common.SecurityUtil;
 import snowcare.backend.dto.request.CommunityArticleSaveRequest;
 import snowcare.backend.dto.response.CommunityArticleResponse;
 import snowcare.backend.service.CommunityArticleService;
@@ -26,6 +27,7 @@ public class CommunityArticleController {
     @GetMapping()
     public ResponseEntity<List<CommunityArticleResponse>> getAllCommunityArticles(@RequestParam(value="userId") Long userId) {
         List<CommunityArticleResponse> response = communityArticleService.getAllCommunityArticles(userId);
+        System.out.println("==== current userId: " + SecurityUtil.getCurrentUserId().toString());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -39,7 +41,7 @@ public class CommunityArticleController {
 
     // 커뮤니티 글 작성
     @PostMapping("/new")
-    public ResponseEntity<Map<String, Long>> addCommunityArticle(CommunityArticleSaveRequest request) throws IOException {
+    public ResponseEntity<Map<String, Long>> addCommunityArticle(@Valid CommunityArticleSaveRequest request) throws IOException {
         Long communityArticleId = communityArticleService.addCommunityArticle(request);
         Map<String, Long> response = new HashMap<>();
         response.put("communityArticleId", communityArticleId);
@@ -49,7 +51,7 @@ public class CommunityArticleController {
     // 커뮤니티 글 수정
     @PatchMapping("/edit/{communityArticleId}")
     public ResponseEntity<Void> updateCommunityArticle(@PathVariable("communityArticleId") Long communityArticleId,
-                                                       CommunityArticleSaveRequest request) throws IOException {
+                                                       @Valid CommunityArticleSaveRequest request) throws IOException {
         communityArticleService.updateCommunityArticle(communityArticleId, request);
         return new ResponseEntity(HttpStatus.OK);
     }

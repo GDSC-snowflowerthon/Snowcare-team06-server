@@ -1,5 +1,6 @@
 package snowcare.backend.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
@@ -42,15 +43,10 @@ public class UserVolunteerPostController {
 
     // 나의 봉사활동 기록하기 작성
     @PostMapping("/new")
-    public ResponseEntity<Map<String, Long>> addUserVolunteerPost(UserVolunteerPostSaveRequest request) throws IOException {
+    public ResponseEntity<Map<String, Long>> addUserVolunteerPost(@Valid UserVolunteerPostSaveRequest request) throws IOException {
         Long userVolunteerPostId = userVolunteerPostService.addUserVolunteerPost(request);
         Map<String, Long> response = new HashMap<>();
         response.put("userVolunteerPostId", userVolunteerPostId);
         return ResponseEntity.ok(response);
     }
-
-
-    /*
-
-     */
 }

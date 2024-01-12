@@ -42,7 +42,7 @@ public class UserController {
     }
 
     // 닉네임 변경
-    @PatchMapping("nickname")
+    @PatchMapping("nickname-edit")
     public ResponseEntity<Void> changeUserNickname(@RequestParam(value = "userId") Long userId,
                                                    @RequestParam(value = "nickname") String nickname) {
         userService.changeUserNickname(userId, nickname);

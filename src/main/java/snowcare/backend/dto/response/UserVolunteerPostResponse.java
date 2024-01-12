@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class UserVolunteerPostResponse {
+    private Long userVolunteerPostId;
     private String title;
     private String content;
     private String image;
