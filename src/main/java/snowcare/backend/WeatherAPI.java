@@ -27,6 +27,9 @@ public class WeatherAPI {
     @Value("${api.key}")
     private String apiKey;
 
+    @Value("${access_token")
+    private String accessToken;
+
     // 매일 아침 9시에 실행
     @Scheduled(cron = "0 0 9 * * ?")
     public void callWeather() throws IOException {
@@ -45,7 +48,7 @@ public class WeatherAPI {
                 URL kakaoUrl = new URL("https://kapi.kakao.com/v2/api/talk/memo/default/send");
                 HttpURLConnection kakaoConn = (HttpURLConnection) kakaoUrl.openConnection();
                 kakaoConn.setRequestMethod("POST");
-                kakaoConn.setRequestProperty("Authorization", "Bearer "+ "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2Iiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTcwNTA3ODYwNCwiZW1haWwiOiJudXkwMzA3QG5hdmVyLmNvbSJ9.UHzI4tYeKcuu2eWGQJ58N_tSi72mYCGP5gdQO9xpLB7IjX5qu-yokuUQu0fz6apeFk9rFjJmWKd9ezVbTQ38ew");
+                kakaoConn.setRequestProperty("Authorization", "Bearer "+ accessToken);
                 kakaoConn.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
                 kakaoConn.setDoOutput(true);
 
