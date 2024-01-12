@@ -31,6 +31,7 @@ public class UserVolunteerPostService {
         List<UserVolunteerPost> userVolunteerPosts = userVolunteerPostRepository.findAll();
         return userVolunteerPosts.stream()
                 .map(m -> UserVolunteerPostResponse.builder()
+                        .userVolunteerPostId(m.getId())
                         .title(m.getTitle())
                         .content(m.getContent())
                         .image(imageService.processImage(m.getImage()))
