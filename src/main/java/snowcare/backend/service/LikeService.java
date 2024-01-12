@@ -25,6 +25,7 @@ public class LikeService {
     private final UserRepository userRepository;
     private final VolunteerRepository volunteerRepository;
     private final CommunityArticleRepository communityArticleRepository;
+    private final ImageService imageService;
 
     // 봉사활동글 좋아요 추가
     public void addLikeVolunteer(Long userId, Long volunteerId) throws IOException {
@@ -67,7 +68,7 @@ public class LikeService {
                         .userImage(v.getUser().getProfileImage())
                         .title(v.getTitle())
                         .content(v.getContent())
-                        .image(v.getImage())
+                        .image(imageService.processImage(v.getImage()))
                         .place(v.getPlace())
                         .createdDate(v.getCreatedDate().toLocalDate())
                         .build())
@@ -117,7 +118,7 @@ public class LikeService {
                         .createdDate(c.getCreatedDate().toLocalDate())
                         .title(c.getTitle())
                         .content(c.getContent())
-                        .image(c.getImage())
+                        .image(imageService.processImage(c.getImage()))
                         .build())
                 .collect(Collectors.toList());
     }
