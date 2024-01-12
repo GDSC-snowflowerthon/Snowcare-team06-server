@@ -70,7 +70,7 @@ public class UserService {
     // 설정 변경
     public void changeUserSetting(UserSettingChangeRequest request) {
         User findUser = getUserOrThrow(request.getUserId());
-        findUser.updateSetting(request.getRegion(), request.getNewVolunteerAlarm(), request.getWeatherAlarm());
+        findUser.updateSetting(request.getRegion(), request.getLatitude(), request.getLongitude(), request.getNewVolunteerAlarm(), request.getWeatherAlarm());
     }
 
     // 예외 처리 - 존재하는 user인지

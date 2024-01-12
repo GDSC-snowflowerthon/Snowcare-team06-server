@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import snowcare.backend.common.exception.CustomException;
 import snowcare.backend.common.exception.ErrorCode;
+import snowcare.backend.domain.CommentVolunteer;
 import snowcare.backend.domain.User;
 import snowcare.backend.domain.Volunteer;
 import snowcare.backend.dto.request.VolunteerSaveRequest;
+import snowcare.backend.dto.response.CommentResponse;
 import snowcare.backend.dto.response.VolunteerResponse;
+import snowcare.backend.repository.CommentVolunteerRepository;
 import snowcare.backend.repository.UserRepository;
 import snowcare.backend.repository.VolunteerRepository;
 
@@ -27,6 +30,7 @@ public class VolunteerService {
     private final ImageService imageService;
     private final LikeService likeService;
     private final UserRepository userRepository;
+    private final CommentVolunteerRepository commentVolunteerRepository;
 
     // 봉사활동 구인글 전체 조회
     public List<VolunteerResponse> getAllVolunteers(Long userId) {
@@ -50,6 +54,15 @@ public class VolunteerService {
     // 봉사활동 구인글 상세 조회
     public VolunteerResponse getVolunteerById(Long volunteerId, Long userId) {
         Volunteer volunteer = getVolunteerOrThrow(volunteerId);
+        List<CommentVolunteer> commentVolunteers = commentVolunteerRepository.findByUserIdAndVolunteerId(userId, volunteerId);
+        List<CommentResponse> commentResponses = commentVolunteers.stream()
+                .map(m -> CommentResponse.builder()
+                        .commentId(m.getId())
+                        .userNickname(m.getUser().getNickname())
+                        .content(m.getContent())
+                        .createdDate(m.getCreatedDate().toLocalDate())
+                        .build())
+                .collect(Collectors.toList());
         return VolunteerResponse.builder()
                 .userNickname(volunteer.getUser().getNickname())
                 .userImage(volunteer.getUser().getProfileImage())
@@ -61,6 +74,7 @@ public class VolunteerService {
                 .place(volunteer.getPlace())
                 .likeCount(volunteer.getLikeCount())
                 .userLiked(likeService.checkIfUserLikedVolunteer(userId, volunteer.getId()))
+                .comments(commentResponses)
                 .build();
     }
 
@@ -86,7 +100,7 @@ public class VolunteerService {
 
     // 봉사활동 구인글 작성
     public Long addVolunteer(VolunteerSaveRequest request) throws IOException {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        User user = getUserOrThrow(request.getUserId());
         String imageUUID = null;
         if (!request.getImage().isEmpty()) {
             imageUUID = imageService.uploadImage(request.getImage());
@@ -100,6 +114,12 @@ public class VolunteerService {
     public void deleteVolunteer(Long volunteerId) {
         getVolunteerOrThrow(volunteerId);
         volunteerRepository.deleteById(volunteerId);
+    }
+
+    // 예외 처리 - 존재하는 User 인가
+    private User getUserOrThrow(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
     }
 
     // 예외 처리 - 존재하는 봉사활동 구인글인지
