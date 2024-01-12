@@ -57,6 +57,7 @@ public class VolunteerService {
         List<CommentVolunteer> commentVolunteers = commentVolunteerRepository.findByUserIdAndVolunteerId(userId, volunteerId);
         List<CommentResponse> commentResponses = commentVolunteers.stream()
                 .map(m -> CommentResponse.builder()
+                        .commentId(m.getId())
                         .userNickname(m.getUser().getNickname())
                         .content(m.getContent())
                         .createdDate(m.getCreatedDate().toLocalDate())

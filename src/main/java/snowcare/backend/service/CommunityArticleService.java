@@ -55,6 +55,7 @@ public class CommunityArticleService {
         List<CommentCommunityArticle> commentCommunityArticles = commentCommunityArticleRepository.findByUserIdAndCommunityArticleId(userId, communityArticleId);
         List<CommentResponse> commentResponses = commentCommunityArticles.stream()
                 .map(m -> CommentResponse.builder()
+                        .commentId(m.getId())
                         .userNickname(m.getUser().getNickname())
                         .content(m.getContent())
                         .createdDate(m.getCreatedDate().toLocalDate())
