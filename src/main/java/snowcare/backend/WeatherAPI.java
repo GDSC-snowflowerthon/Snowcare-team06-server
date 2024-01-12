@@ -1,18 +1,20 @@
 package snowcare.backend;
 
+import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import snowcare.backend.domain.User;
 import snowcare.backend.repository.UserRepository;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -43,7 +45,7 @@ public class WeatherAPI {
                 URL kakaoUrl = new URL("https://kapi.kakao.com/v2/api/talk/memo/default/send");
                 HttpURLConnection kakaoConn = (HttpURLConnection) kakaoUrl.openConnection();
                 kakaoConn.setRequestMethod("POST");
-                kakaoConn.setRequestProperty("Authorization", "Bearer "+ access_token);
+                kakaoConn.setRequestProperty("Authorization", "Bearer "+ "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2Iiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTcwNTA3ODYwNCwiZW1haWwiOiJudXkwMzA3QG5hdmVyLmNvbSJ9.UHzI4tYeKcuu2eWGQJ58N_tSi72mYCGP5gdQO9xpLB7IjX5qu-yokuUQu0fz6apeFk9rFjJmWKd9ezVbTQ38ew");
                 kakaoConn.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
                 kakaoConn.setDoOutput(true);
 
@@ -58,18 +60,43 @@ public class WeatherAPI {
                     // 가져온 날씨 정보 파싱
                     JSONParser parser = new JSONParser();
                     JSONObject data = (JSONObject)parser.parse(sb.toString());
-                    JSONArray weather = (JSONArray) data.get("weather");
-                    JSONObject weather_info = (JSONObject) weather.get(0);
 
                     // weather main 종류 : Thunderstorm, Drizzle, Rain, Snow, Atmosphere, Clear, Clouds
-                    String todaysWeather = (String) weather_info.get("main");
-                    String weatherDescription = (String) weather_info.get("description");
+                    JSONArray weather = (JSONArray) data.get("weather");
+                    JSONObject weatherInfo = (JSONObject) weather.get(0);
+                    String todaysWeather = (String) weatherInfo.get("main");
+                    String weatherDescription = (String) weatherInfo.get("description");
+
+//                    JSONArray temperature = (JSONArray) data.get("main");
+//                    JSONObject tempInfo = (JSONObject) temperature.get(0);
+//                    Double tempNow = ((Double) tempInfo.get("temp")) - 273.15;
+//                    Double tempMax = ((Double) tempInfo.get("temp_max")) - 273.15;
+//                    Double tempMin = ((Double) tempInfo.get("temp_min")) - 273.15;
+//                    int humidity = (int) tempInfo.get("humidity");
 
                     // 눈이 올 때만 알림 주기
                     if (todaysWeather.equals("Snow")) {
-                        System.out.println("weather : " + todaysWeather);
-                        System.out.println("description : " + weatherDescription);
-                        System.out.println("눈치우기 봉사활동을 할 수 있는 날이에요");
+
+                        // 카카오톡 메세지 전송 데이터 설정
+                        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(kakaoConn.getOutputStream()));
+                        StringBuilder stringBuilder = new StringBuilder();
+                        JsonObject kakaoJson = new JsonObject();
+                        kakaoJson.addProperty("object_type", "text");
+                        kakaoJson.addProperty("text", "현재 기온 : -13\n최대 기온 : -9\n최저 기온 : -17\n습도 : 67\n눈이 오는 날이에요! 눈치우기 봉사활동을 하러 가볼까요?");
+
+                        JsonObject link = new JsonObject();
+                        link.addProperty("web_url", "http://localhost:3000");
+
+                        kakaoJson.add("link", link.getAsJsonObject());
+
+                        stringBuilder.append("template_object="+kakaoJson);
+                        System.out.println(stringBuilder.toString());
+
+                        bw.write(stringBuilder.toString());
+                        bw.flush();
+
+                        bw.close();
+                        br.close();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
