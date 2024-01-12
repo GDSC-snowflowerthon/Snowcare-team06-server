@@ -63,6 +63,8 @@ public class User implements UserDetails {
     }
 
     private String region;
+    private Double latitude;
+    private Double longitude;
     @Builder.Default
     private Boolean weatherAlarm=false;
     @Builder.Default
@@ -118,8 +120,10 @@ public class User implements UserDetails {
         this.profileImage = imageUUID;
     }
     public void updateNickname(String nickname) {this.nickname = nickname;}
-    public void updateSetting(String region, Boolean newVolunteerAlarm, Boolean weatherAlarm){
+    public void updateSetting(String region, Double latitude, Double longitude, Boolean newVolunteerAlarm, Boolean weatherAlarm){
         this.region = region;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.newVolunteerAlarm = newVolunteerAlarm;
         this.weatherAlarm = weatherAlarm;
     }
