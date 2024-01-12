@@ -2,7 +2,6 @@ package snowcare.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import snowcare.backend.common.oauth.*;
@@ -10,6 +9,9 @@ import snowcare.backend.common.oauth.dto.AccessTokenResponse;
 import snowcare.backend.common.oauth.dto.AuthTokens;
 import snowcare.backend.domain.User;
 import snowcare.backend.repository.UserRepository;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,23 +24,31 @@ public class AuthService {
 
     public AuthTokens login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
-        Long userId = findOrCreateUser(oAuthInfoResponse, params);
-        return authTokensGenerator.generate(userId, oAuthInfoResponse.getEmail());
+        Map<String, Object> idAndIfNew = findOrCreateUser(oAuthInfoResponse, params);
+        Long userId = (Long) idAndIfNew.get("userId");
+        Boolean newUser = (Boolean) idAndIfNew.get("newUser");
+        return authTokensGenerator.generate(userId, oAuthInfoResponse.getEmail(), newUser);
     }
 
-    private Long findOrCreateUser(OAuthInfoResponse oAuthInfoResponse, OAuthLoginParams extraParams) {
-        return userRepository.findByEmail(oAuthInfoResponse.getEmail())
-                .map(User::getId)
-                .orElseGet(() -> newUser(oAuthInfoResponse, extraParams));
+    private Map<String, Object> findOrCreateUser(OAuthInfoResponse oAuthInfoResponse, OAuthLoginParams extraParams) {
+        Map<String, Object> idAndIfNew = new HashMap<>();
+        Boolean newUser = false;
+        Long userId = null;
+        User user = userRepository.findByEmail(oAuthInfoResponse.getEmail());
+        if (user == null){
+            userId = newUser(oAuthInfoResponse, extraParams);
+            newUser = true;
+        } else{
+            userId = user.getId();
+        }
+        idAndIfNew.put("userId", userId);
+        idAndIfNew.put("newUser", newUser);
+        return idAndIfNew;
     }
 
     private Long newUser(OAuthInfoResponse oAuthInfoResponse, OAuthLoginParams extraParams) {
         User user = User.builder()
                 .email(oAuthInfoResponse.getEmail())
-                .nickname(extraParams.getNickname())
-                .region(extraParams.getRegion())
-                .weatherAlarm(extraParams.getWeatherAlarm())
-                .newVolunteerAlarm(extraParams.getNewVolunteerAlarm())
                 //.oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .build();
 

@@ -25,7 +25,10 @@ public class SecurityConfig {
             "/swagger-resources/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
-            "/users/nickname/**"
+            "/users/nickname/**",
+            "/volunteers/recent/**",
+            "/volunteers",
+            "/community"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;

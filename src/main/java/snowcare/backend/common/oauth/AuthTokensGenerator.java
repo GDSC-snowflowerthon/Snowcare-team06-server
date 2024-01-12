@@ -25,7 +25,7 @@ public class AuthTokensGenerator { // AuthTokens 을 발급해주는 클래스
     private final RedisUtil redisUtil;
     private final UserRepository userRepository;
 
-    public AuthTokens generate(Long userId, String email) { // userId (사용자 식별값) 을 받아 Access Token 을 생성
+    public AuthTokens generate(Long userId, String email, Boolean newUser) { // userId (사용자 식별값) 을 받아 Access Token 을 생성
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
@@ -38,7 +38,7 @@ public class AuthTokensGenerator { // AuthTokens 을 발급해주는 클래스
 
         redisUtil.setDataExpire(String.valueOf(userId), refreshToken, refreshTokenExpiredAt.getTime()); // 시간은 long 타입으로
 
-        return AuthTokens.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME / 1000L);
+        return AuthTokens.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME / 1000L, userId, newUser);
     }
 
     public Long extractUserId(String token) { // Access Token(또는 Refresh Token) 에서 userId (사용자 식별값) 추출

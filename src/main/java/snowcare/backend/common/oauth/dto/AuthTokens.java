@@ -14,8 +14,10 @@ public class AuthTokens { // 사용자에게 내려주는 서비스의 인증 �
     private String refreshToken;
     private String grantType;
     private Long expiresIn;
+    private Long userId;
+    private Boolean newUser;
 
-    public static AuthTokens of(String accessToken, String refreshToken, String grantType, Long expiresIn) {
-        return new AuthTokens(accessToken, refreshToken, grantType, expiresIn);
+    public static AuthTokens of(String accessToken, String refreshToken, String grantType, Long expiresIn, Long userId, Boolean newUser) {
+        return new AuthTokens(accessToken, refreshToken, grantType, expiresIn, userId, newUser);
     }
 }
