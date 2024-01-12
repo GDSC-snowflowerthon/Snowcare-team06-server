@@ -44,6 +44,7 @@ public class UserVolunteerPostService {
     public UserVolunteerPostResponse getUserVolunteerPostById(Long userVolunteerPostId, Long userId) {
         UserVolunteerPost userVolunteerPost = getUserVolunteerPostOrThrow(userVolunteerPostId);
         return UserVolunteerPostResponse.builder()
+                .userVolunteerPostId(userVolunteerPost.getId())
                 .title(userVolunteerPost.getTitle())
                 .content(userVolunteerPost.getContent())
                 .image(imageService.processImage(userVolunteerPost.getImage()))
