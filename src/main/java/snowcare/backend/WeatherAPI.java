@@ -33,21 +33,29 @@ public class WeatherAPI {
         for (User user : users) {
             try {
                 // OpenWeatherMap API connection
-                URL url = new URL("https://api.openweathermap.org/data/2.5/weather?lat="+user.getLatitude()+"&lon="+user.getLongitude()+"&appid="+ apiKey);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("Content-type", "application/json");
-                conn.setDoOutput(true);
+                URL weatherUrl = new URL("https://api.openweathermap.org/data/2.5/weather?lat="+user.getLatitude()+"&lon="+user.getLongitude()+"&appid="+ apiKey);
+                HttpURLConnection weatherConn = (HttpURLConnection) weatherUrl.openConnection();
+                weatherConn.setRequestMethod("GET");
+                weatherConn.setRequestProperty("Content-type", "application/json");
+                weatherConn.setDoOutput(true);
 
-                // 정보 가져오기
+                // 카카오톡 메세지 api connection
+                URL kakaoUrl = new URL("https://kapi.kakao.com/v2/api/talk/memo/default/send");
+                HttpURLConnection kakaoConn = (HttpURLConnection) kakaoUrl.openConnection();
+                kakaoConn.setRequestMethod("POST");
+                kakaoConn.setRequestProperty("Authorization", "Bearer "+ access_token);
+                kakaoConn.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+                kakaoConn.setDoOutput(true);
+
+                // 날씨 정보 가져오기
                 try {
                     StringBuffer sb = new StringBuffer();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                    BufferedReader br = new BufferedReader(new InputStreamReader(weatherConn.getInputStream(), "UTF-8"));
                     while(br.ready()) {
                         sb.append(br.readLine());
                     }
 
-                    // 가져온 정보 파싱
+                    // 가져온 날씨 정보 파싱
                     JSONParser parser = new JSONParser();
                     JSONObject data = (JSONObject)parser.parse(sb.toString());
                     JSONArray weather = (JSONArray) data.get("weather");
